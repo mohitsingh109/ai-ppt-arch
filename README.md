@@ -20,6 +20,9 @@
 
 ---
 ### Application CI/CD (ECS deploy pipeline)
+- [Design Doc](https://docs.google.com/document/d/1eE0Z8wxlwAWvePPez-o3rtoVcLq9sc0_9-hrtdwX8aU/edit?usp=sharing)
+- [Architecture Diagram](https://drive.google.com/file/d/1ZdONRXpHxO13M8QB2xYKGwbOWvHyLaZE/view?usp=sharing)
+- [Draw.io](https://app.diagrams.net/#G1ZdONRXpHxO13M8QB2xYKGwbOWvHyLaZE#%7B%22pageId%22%3A%22SsCMjwvy4K0QPhEGk4fs%22%7D)
 
 ---
 ### Scalable AI PPT Generation Workflow
