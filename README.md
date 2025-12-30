@@ -26,3 +26,6 @@
 
 ---
 ### Scalable AI PPT Generation Workflow
+- [Design Doc]
+- [Architecture Diagram]
+- [Draw.io]
