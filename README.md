@@ -27,7 +27,7 @@
 
 ---
 ### Scalable AI PPT Generation Workflow
-- [Design Doc]
+- [Design Doc](https://docs.google.com/document/d/1wPpJFEYHTGUWS_gJciBJuyi2wcW4XQ9BSYGET_sTIZU/edit?usp=sharing)
 - [Architecture Diagram](https://drive.google.com/file/d/1ZdONRXpHxO13M8QB2xYKGwbOWvHyLaZE/view?usp=sharing)
 - [Draw.io](https://app.diagrams.net/#G1ZdONRXpHxO13M8QB2xYKGwbOWvHyLaZE#%7B%22pageId%22%3A%22cpLtqhhjErZHpa3t0g-G%22%7D)
 
