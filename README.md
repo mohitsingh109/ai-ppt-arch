@@ -30,3 +30,8 @@
 - [Design Doc]
 - [Architecture Diagram]
 - [Draw.io]
+
+---
+
+### AI PPT Generation Workflow – Design Clarifications & Key Decisions
+- [Doc Q/A](https://docs.google.com/document/d/1TozIN8uHHGv3603HZzup4m3IGf2fiLuRVbBjQU0oiOs/edit?usp=sharing)
