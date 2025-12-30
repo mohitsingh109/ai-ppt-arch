@@ -1,0 +1,126 @@
+name: AI Service – Multi-Region Deployment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version or commit SHA"
+        required: true
+        default: "v1.0.0"
+
+env:
+  SERVICE_NAME: ai-service
+  PRIMARY_REGION: us-east-1
+  REGIONS: "us-east-1 eu-central-1 ap-south-1"
+
+jobs:
+
+  # --------------------------------------------------
+  # 1. BUILD & TEST (BUILD ONCE)
+  # --------------------------------------------------
+  build:
+    name: Build & Test AI Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        run: echo "Checking out application source code"
+
+      - name: Run unit & integration tests
+        run: echo "Running tests for AI Service"
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image for ${SERVICE_NAME}"
+          echo "Image tag: ${SERVICE_NAME}:${{ github.event.inputs.version }}"
+
+      - name: Push image to primary ECR
+        run: |
+          echo "Authenticating to AWS using OIDC"
+          echo "Pushing image to ECR in ${PRIMARY_REGION}"
+
+  # --------------------------------------------------
+  # 2. IMAGE REPLICATION (SIMULATED)
+  # --------------------------------------------------
+  replicate:
+    name: Replicate Image to Regions
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Replicate image across regions
+        run: |
+          echo "Replicating image to regional ECRs"
+          for region in $REGIONS; do
+            echo "Image available in ECR region: $region"
+          done
+
+  # --------------------------------------------------
+  # 3. DEPLOY TO PRIMARY / CANARY REGION
+  # --------------------------------------------------
+  deploy-primary:
+    name: Deploy to Primary Region
+    runs-on: ubuntu-latest
+    needs: replicate
+
+    steps:
+      - name: Deploy AI Service to primary region
+        run: |
+          echo "Deploying ${SERVICE_NAME} to ECS in ${PRIMARY_REGION}"
+          echo "Updating ECS task definition"
+          echo "Rolling deployment started"
+
+      - name: Verify deployment health
+        run: |
+          echo "Checking ALB health checks"
+          echo "Checking ECS service stability"
+          echo "Deployment successful in ${PRIMARY_REGION}"
+
+  # --------------------------------------------------
+  # 4. MANUAL APPROVAL (PRODUCTION GATE)
+  # --------------------------------------------------
+  approval:
+    name: Manual Approval for Global Rollout
+    runs-on: ubuntu-latest
+    needs: deploy-primary
+    environment:
+      name: production
+    steps:
+      - name: Await approval
+        run: echo "Waiting for manual approval to deploy to remaining regions"
+
+  # --------------------------------------------------
+  # 5. DEPLOY TO REMAINING REGIONS
+  # --------------------------------------------------
+  deploy-global:
+    name: Deploy to Remaining Regions
+    runs-on: ubuntu-latest
+    needs: approval
+
+    steps:
+      - name: Deploy AI Service globally
+        run: |
+          for region in $REGIONS; do
+            if [ "$region" != "${PRIMARY_REGION}" ]; then
+              echo "Deploying ${SERVICE_NAME} to ECS in $region"
+              echo "Updating ECS task definition"
+              echo "Rolling deployment started"
+              echo "Verifying deployment health in $region"
+              echo "Deployment successful in $region"
+            fi
+          done
+
+  # --------------------------------------------------
+  # 6. ROLLBACK (ON FAILURE – CONCEPTUAL)
+  # --------------------------------------------------
+  rollback:
+    name: Rollback on Failure
+    runs-on: ubuntu-latest
+    if: failure()
+
+    steps:
+      - name: Rollback deployment
+        run: |
+          echo "Deployment failure detected"
+          echo "Rolling back ECS services to previous task definition"
+          echo "Rollback completed"
